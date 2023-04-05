@@ -1,22 +1,46 @@
+#import needed libraries
 import cv2
 import numpy as np 
 import imutils
 
-cap= cv2.VideoCapture (0)
+cap= cv2.VideoCapture(0)
 cap.set (3,640)
 cap.set (4,480)
 
+#create window for sliders
+cv2.namedWindow('sliders')
+
+def slide(val):
+  pass
+  
+#create the sliders
+cv2.create('red min', 'sliders', 0, 255, slide)
+cv2.create('green min', 'sliders', 0, 255, slide)
+cv2.create('blue min', 'sliders', 0, 255, slide)
+
+cv2.create('red max', 'sliders', 0, 255, slide)
+cv2.create('green max', 'sliders', 0, 255, slide)
+cv2.create('blue max', 'sliders', 0, 255, slide)
+
 while True:
-  _frame= cap.read()
+  rMin = cv2.getTrackbarPos('red min', 'sliders')
+  gMin = cv2.getTrackbarPos('green min', 'sliders')
+  bMin = cv2.getTrackbarPos('blue min', 'sliders')
+  
+  rMax = cv2.getTrackbarPos('red max', 'sliders')
+  gMax = cv2.getTrackbarPos('green max', 'sliders')
+  bMax = cv2.getTrackbarPos('blue max', 'sliders')
+  
+  _,frame= cap.read()
   
   hsv = cv2.cvtColor (frame, cv2.COLOR_BGR2HSV)
   
-  lower_red = np.array ([0,50,120])
-  upper_red = np.array ([10,255,255])
+  lower_red = np.array ([rMin,gMin,bMin])
+  upper_red = np.array ([rMx,gMax,bMax])
   
   mask = cv2.inRange (hsv,lower_red, upper_red)
   
-  cnts = cv2.findContours (mask, cv2.RETR_TREE,cV2.CHAIN_APPROX_SIMPLE)
+  cnts = cv2.findContours (mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
   cnts = imutils.grab_contours (cnts)
   
   for c in cnts:
@@ -28,14 +52,13 @@ while True:
       M = cv2.moments(c)
   
       cx = int (M["m10"]/ M["m00"])
-      cy = int(M["m01"/ M["m00"])
+      cy = int (M["m01"]/ M["m00"])
   
       cv2.circle (frame, (cx,cy),7, (255,255,255), -1)
   
   cv2.imshow ("result",frame)
 
-  k = cv2.waitKey (5)
-  if k == 27:
+  if event == cv2.EVENT_MBUTTONDOWN: 
     break
 cap.release()
 cv2.destroyAllWindows()
