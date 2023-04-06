@@ -14,13 +14,13 @@ def slide(val):
   pass
   
 #create the sliders
-cv2.create('red min', 'sliders', 0, 255, slide)
-cv2.create('green min', 'sliders', 0, 255, slide)
-cv2.create('blue min', 'sliders', 0, 255, slide)
+cv2.createTrackbar('red min', 'sliders', 0, 255, slide)
+cv2.createTrackbar('green min', 'sliders', 0, 255, slide)
+cv2.createTrackbar('blue min', 'sliders', 0, 255, slide)
 
-cv2.create('red max', 'sliders', 0, 255, slide)
-cv2.create('green max', 'sliders', 0, 255, slide)
-cv2.create('blue max', 'sliders', 0, 255, slide)
+cv2.createTrackbar('red max', 'sliders', 0, 255, slide)
+cv2.createTrackbar('green max', 'sliders', 0, 255, slide)
+cv2.createTrackbar('blue max', 'sliders', 0, 255, slide)
 
 while True:
   rMin = cv2.getTrackbarPos('red min', 'sliders')
@@ -36,7 +36,7 @@ while True:
   hsv = cv2.cvtColor (frame, cv2.COLOR_BGR2HSV)
   
   lower_red = np.array ([rMin,gMin,bMin])
-  upper_red = np.array ([rMx,gMax,bMax])
+  upper_red = np.array ([rMax,gMax,bMax])
   
   mask = cv2.inRange (hsv,lower_red, upper_red)
   
@@ -58,7 +58,7 @@ while True:
   
   cv2.imshow ("result",frame)
 
-  if event == cv2.EVENT_MBUTTONDOWN: 
+  if cv2.waitKey(1) & 0xFF ==ord('q'): 
     break
 cap.release()
 cv2.destroyAllWindows()
